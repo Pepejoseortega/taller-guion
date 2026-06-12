@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Taller — Guión</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #f0ede8;
+    --muted: #888;
+    --b1: #3b7dd8;
+    --b2: #e07b2a;
+    --b3: #d94040;
+    --b4: #2e9e6b;
+    --b5: #888;
+    --accent: #f0ede8;
+    --font: -apple-system, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
+
+  /* NAV */
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+  }
+  #nav-title { font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  #timer {
+    font-size: 22px; font-weight: 300; letter-spacing: 0.04em;
+    color: var(--text); font-variant-numeric: tabular-nums;
+  }
+  #timer.running { color: #4caf50; }
+  #timer.warning { color: #ff9800; }
+  #timer-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 14px;
+    color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer;
+  }
+
+  /* BLOQUE TABS */
+  #tabs {
+    position: fixed; top: 57px; left: 0; right: 0; z-index: 99;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(10px);
+    display: flex; overflow-x: auto; gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  #tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 500; cursor: pointer;
+    border: 1px solid transparent; color: var(--muted);
+    background: var(--surface); transition: all 0.2s;
+  }
+  .tab.active { color: var(--bg); }
+  .tab[data-b="1"].active { background: var(--b1); border-color: var(--b1); }
+  .tab[data-b="2"].active { background: var(--b2); border-color: var(--b2); }
+  .tab[data-b="3"].active { background: var(--b3); border-color: var(--b3); }
+  .tab[data-b="4"].active { background: var(--b4); border-color: var(--b4); }
+  .tab[data-b="5"].active { background: #666; border-color: #666; }
+
+  /* CONTENT */
+  #content { padding: 140px 0 120px; }
+  .bloque { display: none; padding: 0 16px; }
+  .bloque.active { display: block; }
+
+  .bloque-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .bloque-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .b1 .bloque-dot { background: var(--b1); }
+  .b2 .bloque-dot { background: var(--b2); }
+  .b3 .bloque-dot { background: var(--b3); }
+  .b4 .bloque-dot { background: var(--b4); }
+  .b5 .bloque-dot { background: #666; }
+
+  .bloque-title { font-size: 17px; font-weight: 500; color: var(--text); }
+  .bloque-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .section { margin-bottom: 28px; }
+  .section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .b1 .section-label { color: var(--b1); }
+  .b2 .section-label { color: var(--b2); }
+  .b3 .section-label { color: var(--b3); }
+  .b4 .section-label { color: var(--b4); }
+
+  p { font-size: 17px; line-height: 1.65; color: var(--text); margin-bottom: 12px; }
+  .cita {
+    background: var(--surface); border-left: 3px solid var(--muted);
+    border-radius: 0 8px 8px 0; padding: 14px 16px;
+    margin: 14px 0; font-size: 17px; line-height: 1.65;
+    color: #d4d0cb; font-style: italic;
+  }
+  .b1 .cita { border-left-color: var(--b1); }
+  .b2 .cita { border-left-color: var(--b2); }
+  .b3 .cita { border-left-color: var(--b3); }
+  .b4 .cita { border-left-color: var(--b4); }
+
+  .tip {
+    background: #1e1e1e; border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; margin: 14px 0;
+    font-size: 14px; color: var(--muted); line-height: 1.5;
+  }
+  .tip::before { content: "💡 "; }
+
+  .lista { list-style: none; padding: 0; margin: 10px 0 16px; }
+  .lista li {
+    font-size: 17px; line-height: 1.6; color: var(--text);
+    padding: 8px 0 8px 20px; position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .lista li:last-child { border-bottom: none; }
+  .lista li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+
+  .principio {
+    background: var(--surface); border-radius: 12px;
+    padding: 16px; margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+  .principio-num {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--b4); margin-bottom: 6px;
+  }
+  .principio-title { font-size: 16px; font-weight: 500; margin-bottom: 10px; }
+
+  /* BOTTOM NAV */
+  #bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,15,15,0.97);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    display: flex; padding: 12px 16px 20px; gap: 10px;
+  }
+  .nav-btn {
+    flex: 1; padding: 12px; border-radius: 10px;
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface); color: var(--text);
+  }
+  .nav-btn.primary {
+    background: var(--text); color: var(--bg); border-color: var(--text);
+  }
+  .nav-btn:disabled { opacity: 0.3; }
+
+  /* PROGRESS */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(90deg, var(--b1), var(--b4));
+    transition: width 0.3s; z-index: 200;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar" style="width:20%"></div>
+
+<div id="nav">
+  <div>
+    <div id="nav-title">Guión del taller</div>
+  </div>
+  <div id="timer">00:00</div>
+  <button id="timer-btn" onclick="toggleTimer()">Iniciar</button>
+</div>
+
+<div id="tabs">
+  <div class="tab active" data-b="1" onclick="goTo(0)">🔵 Apertura</div>
+  <div class="tab" data-b="2" onclick="goTo(1)">🟠 Tu historia</div>
+  <div class="tab" data-b="3" onclick="goTo(2)">🔴 El enemigo</div>
+  <div class="tab" data-b="4" onclick="goTo(3)">🟢 Principios</div>
+  <div class="tab" data-b="5" onclick="goTo(4)">⚪ Cierre</div>
+</div>
+
+<div id="content">
+
+  <!-- BLOQUE 1 -->
+  <div class="bloque b1 active" id="bloque-0">
+    <div class="bloque-header">
+      <div class="bloque-dot"></div>
+      <div>
+        <div class="bloque-title">Bloque 1 — Apertura</div>
+        <div class="bloque-meta">0–8 min · Romper el hielo</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Pregunta de apertura</div>
+      <p>Empieza con una pregunta al público, no con una presentación tuya:</p>
+      <div class="cita">"A ver, levanten la mano — ¿quién aquí alguna vez ha pensado en tener su propio negocio?"</div>
+      <div class="tip">Pausa. Observa quién levanta la mano.</div>
+      <div class="cita">"¿Y quién de los que levantaron la mano todavía no ha empezado?"</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">El gancho</div>
+      <p>La mayoría no ha empezado. Ahí dices:</p>
+      <div class="cita">"Perfecto. Este taller es para ustedes. No para los que ya saben — para los que todavía están esperando el momento correcto. Hoy vamos a hablar de por qué ese momento nunca llega... y qué hacer al respecto."</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="bloque b2" id="bloque-1">
+    <div class="bloque-header">
+      <div class="bloque-dot"></div>
+      <div>
+        <div class="bloque-title">Bloque 2 — Tu historia</div>
+        <div class="bloque-meta">8–22 min · Que se vean reflejados en ti</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Clave del bloque</div>
+      <p>No cuentes tu historia como un éxito. Cuéntala como una lucha que ellos reconocerán.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">1. El antes · 3 min</div>
+      <p>¿Cómo eras antes de emprender? ¿Qué miedos tenías? ¿Qué te decían los demás? Sé específico y vulnerable — eso es lo que conecta.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">2. El quiebre · 4 min</div>
+      <p>¿Cuál fue el momento en que decidiste intentarlo aunque no estuvieras listo? No tiene que ser dramático — a veces el quiebre es simplemente el hartazgo.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">3. El primer intento · 4 min</div>
+      <p>No saltes al éxito. Habla del primer intento torpe, el primer error, la primera venta incómoda. Esta parte es la más poderosa para audiencia joven.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">4. Lo que aprendiste · 3 min</div>
+      <p>Puente hacia los principios:</p>
+      <div class="cita">"Con el tiempo entendí que los principios que hacen funcionar un negocio son los mismos que hacen funcionar una buena vida. No lo inventé yo — lo he aprendido en el camino, con errores, y también de fuentes que me han guiado."</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="bloque b3" id="bloque-2">
+    <div class="bloque-header">
+      <div class="bloque-dot"></div>
+      <div>
+        <div class="bloque-title">Bloque 3 — El enemigo real</div>
+        <div class="bloque-meta">22–38 min · Desarmar las creencias</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Instrucción al público</div>
+      <div class="cita">"Voy a decir algunas frases. Levanten la mano si alguna vez la han pensado..."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Frases + respuesta</div>
+      <ul class="lista">
+        <li>"Cuando tenga dinero, empiezo" → <strong>Parálisis por análisis</strong></li>
+        <li>"Todavía me falta aprender más" → <strong>Síndrome del impostor</strong></li>
+        <li>"¿Y si fracaso y quedo mal?" → <strong>Miedo al qué dirán</strong></li>
+        <li>"Yo no soy de los que se les da eso" → <strong>Identidad limitante</strong></li>
+      </ul>
+      <div class="tip">Después de cada frase: pausa, nombra la trampa mental, explica en 1 minuto por qué es una mentira.</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Cierre del bloque</div>
+      <div class="cita">"El problema no es que no estén listos. El problema es que están esperando sentirse listos — y ese momento nunca llega. La confianza no viene antes de actuar. Viene después."</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4 -->
+  <div class="bloque b4" id="bloque-3">
+    <div class="bloque-header">
+      <div class="bloque-dot"></div>
+      <div>
+        <div class="bloque-title">Bloque 4 — Los principios</div>
+        <div class="bloque-meta">38–50 min · Nueva forma de ver el negocio</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Introducción</div>
+      <div class="cita">"Quiero compartirles algo que ha guiado mi forma de ver los negocios. No son tendencias de redes sociales ni fórmulas mágicas — son principios que han funcionado por generaciones."</div>
+    </div>
+
+    <div class="principio">
+      <div class="principio-num">Principio 1 · 3 min</div>
+      <div class="principio-title">Resuelve una necesidad real, no persigas una idea bonita</div>
+      <div class="cita">"Los negocios que funcionan no nacen de la inspiración — nacen de observar un problema y decidir resolverlo."</div>
+      <p style="font-size:15px; color:var(--muted);">Ejemplo tuyo → conéctalo con: "Comenzar con algo pequeño, pensar en grande."</p>
+      <div class="cita">"No necesitas el negocio perfecto. Necesitas tu primer cliente."</div>
+    </div>
+
+    <div class="principio">
+      <div class="principio-num">Principio 2 · 3 min</div>
+      <div class="principio-title">Sé íntegro con cada promesa, por pequeña que sea</div>
+      <div class="cita">"El activo más valioso de tu negocio no aparece en ningún estado financiero: es tu reputación. Se construye o destruye en los detalles."</div>
+      <p style="font-size:15px; color:var(--muted);">Ejemplo tuyo → momento donde la confianza de un cliente marcó la diferencia.</p>
+    </div>
+
+    <div class="principio">
+      <div class="principio-num">Principio 3 · 3 min</div>
+      <div class="principio-title">Dedícate a tu negocio, no solamente trabajes en él</div>
+      <div class="cita">"El que solo trabaja en él apaga fuegos. El que trabaja para él está pensando en cómo hacerlo crecer."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Idea unificadora</div>
+      <div class="cita">"Los principios que guían un buen negocio son casi los mismos que guían una buena vida: disciplina, integridad, servir a otros y nunca dejar de aprender. Si construyes tu negocio sobre eso, tienes una base que ninguna crisis te puede quitar."</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 5 -->
+  <div class="bloque b5" id="bloque-4">
+    <div class="bloque-header">
+      <div class="bloque-dot"></div>
+      <div>
+        <div class="bloque-title">Bloque 5 — Cierre</div>
+        <div class="bloque-meta">50–60 min · Que salgan con una decisión</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Ejercicio en vivo · 3 min</div>
+      <div class="cita">"Saquen su teléfono. Abran sus notas. Escriban UNA cosa que han estado posponiendo relacionada con su negocio o idea. Solo una. No la lista — una."</div>
+      <div class="tip">Deja que escriban en silencio. Luego:</div>
+      <div class="cita">"Eso que escribieron es su próximo paso. No el plan completo. Solo ese paso."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Cierre final</div>
+      <div class="cita">"Yo no estaba listo cuando empecé. Cometí errores. Hubo momentos en que quise parar. Pero aprendí que la persistencia vale más que el talento, y que empezar imperfecto vale más que no empezar nunca.
+
+Los principios funcionan. La integridad funciona. Servir a tus clientes funciona. Y ustedes — con todo lo que tienen, con su edad, con su energía — tienen más de lo que necesitan para empezar.
+
+La única pregunta es: ¿van a esperar a estar listos, o van a decidir empezar hoy?"</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Nota final</div>
+      <div class="tip">Si el contexto lo permite, cierra con una oración o momento de reflexión — conecta con tu rol y le da peso espiritual al cierre.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bottom-nav">
+  <button class="nav-btn" id="btn-prev" onclick="prev()" disabled>← Anterior</button>
+  <button class="nav-btn primary" id="btn-next" onclick="next()">Siguiente →</button>
+</div>
+
+<script>
+  let current = 0;
+  const total = 5;
+  const bloques = document.querySelectorAll('.bloque');
+  const tabs = document.querySelectorAll('.tab');
+  const progress = [20, 40, 60, 80, 100];
+
+  let timerInterval = null;
+  let seconds = 0;
+  let running = false;
+
+  function goTo(i) {
+    bloques[current].classList.remove('active');
+    tabs[current].classList.remove('active');
+    current = i;
+    bloques[current].classList.add('active');
+    tabs[current].classList.add('active');
+    document.getElementById('progress-bar').style.width = progress[i] + '%';
+    document.getElementById('btn-prev').disabled = i === 0;
+    document.getElementById('btn-next').disabled = i === total - 1;
+    document.getElementById('btn-next').textContent = i === total - 1 ? '✓ Fin' : 'Siguiente →';
+    tabs[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function next() { if (current < total - 1) goTo(current + 1); }
+  function prev() { if (current > 0) goTo(current - 1); }
+
+  function toggleTimer() {
+    const btn = document.getElementById('timer-btn');
+    const el = document.getElementById('timer');
+    if (!running) {
+      running = true;
+      btn.textContent = 'Pausar';
+      timerInterval = setInterval(() => {
+        seconds++;
+        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        el.textContent = m + ':' + s;
+        el.className = seconds < 2700 ? 'running' : seconds < 3600 ? 'warning' : '';
+      }, 1000);
+    } else {
+      running = false;
+      btn.textContent = 'Continuar';
+      clearInterval(timerInterval);
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+</script>
+</body>
+</html>
