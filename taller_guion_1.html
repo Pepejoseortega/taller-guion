@@ -184,9 +184,10 @@
 <div id="tabs">
   <div class="tab active" data-b="1" onclick="goTo(0)">🔵 Apertura</div>
   <div class="tab" data-b="2" onclick="goTo(1)">🟠 Tu historia</div>
-  <div class="tab" data-b="3" onclick="goTo(2)">🔴 El enemigo</div>
-  <div class="tab" data-b="4" onclick="goTo(3)">🟢 Principios</div>
-  <div class="tab" data-b="5" onclick="goTo(4)">⚪ Cierre</div>
+  <div class="tab" data-b="3" onclick="goTo(2)">🟡 Dinámica</div>
+  <div class="tab" data-b="3" onclick="goTo(3)">🔴 El enemigo</div>
+  <div class="tab" data-b="4" onclick="goTo(4)">🟢 Principios</div>
+  <div class="tab" data-b="5" onclick="goTo(5)">⚪ Cierre</div>
 </div>
 
 <div id="content">
@@ -283,8 +284,55 @@
     </div>
   </div>
 
-  <!-- BLOQUE 3 -->
+  <!-- DINÁMICA: ACENTUAR LO POSITIVO -->
   <div class="bloque b3" id="bloque-2">
+    <div class="bloque-header">
+      <div class="bloque-dot" style="background:#e8b84b;"></div>
+      <div>
+        <div class="bloque-title">Dinámica — Acentuar lo positivo</div>
+        <div class="bloque-meta">22–32 min · 10 min · Sin materiales</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Introducción · di esto</div>
+      <div class="cita">"Antes de seguir quiero hacer algo rápido. Muchos crecimos con la idea de que hablar bien de uno mismo es presumir. Vamos a romper eso ahorita."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Instrucción al grupo</div>
+      <p>Pide que se junten en parejas con alguien que no conozcan bien. Luego di:</p>
+      <div class="cita">"Cada quien le va a decir a su compañero tres cosas positivas de sí mismo. Solo positivas — no se permiten comentarios negativos ni frases como 'no soy tan bueno pero...'"</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Las 3 dimensiones · escríbelas en pizarrón si puedes</div>
+      <ul class="lista">
+        <li>Dos atributos físicos que me agradan de mí mismo</li>
+        <li>Dos cualidades de personalidad que me agradan de mí mismo</li>
+        <li>Una capacidad o habilidad que me agrada de mí mismo</li>
+      </ul>
+      <div class="tip">Dales 3-4 minutos. Si los ves dudando, dales un empujón: "No se preocupen si se sienten raros — eso es exactamente el punto."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Preguntas de reflexión · para todo el grupo</div>
+      <ul class="lista">
+        <li>¿Cómo se sintieron al compartir sus cualidades positivas?</li>
+        <li>¿Les fue fácil o difícil identificar cosas buenas de sí mismos?</li>
+        <li>¿Qué nos dice eso sobre cómo nos vemos a nosotros mismos?</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Puente al siguiente bloque</div>
+      <div class="cita">"Si les costó trabajo decir cosas buenas de ustedes mismos, no están solos. La mayoría de nosotros tiene una voz interna que nos frena. Ahora vamos a ponerle nombre a esa voz."</div>
+      <div class="tip">Este cierre conecta directamente con el Bloque 3 de creencias limitantes.</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="bloque b3" id="bloque-3">
     <div class="bloque-header">
       <div class="bloque-dot"></div>
       <div>
@@ -316,7 +364,7 @@
   </div>
 
   <!-- BLOQUE 4 -->
-  <div class="bloque b4" id="bloque-3">
+  <div class="bloque b4" id="bloque-4">
     <div class="bloque-header">
       <div class="bloque-dot"></div>
       <div>
@@ -358,7 +406,7 @@
   </div>
 
   <!-- BLOQUE 5 -->
-  <div class="bloque b5" id="bloque-4">
+  <div class="bloque b5" id="bloque-5">
     <div class="bloque-header">
       <div class="bloque-dot"></div>
       <div>
@@ -399,7 +447,7 @@ La única pregunta es: ¿van a esperar a estar listos, o van a decidir empezar h
 
 <script>
   let current = 0;
-  const total = 5;
+  const total = 6;
   const bloques = document.querySelectorAll('.bloque');
   const tabs = document.querySelectorAll('.tab');
   const progress = [20, 40, 60, 80, 100];
